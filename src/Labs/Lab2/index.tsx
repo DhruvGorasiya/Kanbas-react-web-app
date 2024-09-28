@@ -5,7 +5,10 @@ import Padding from "./Padding";
 import Margins from "./Margins";
 import Positions from "./Positions";
 import Dimensions from "./Dimensions";
+import Zindex from "./Zindex";
+import Float from "./Float";
 import Corners from "./Corners";
+import GridLayout from "./GridLayout";
 import "./index.css";
 export default function Lab2() {
   return (
@@ -64,6 +67,9 @@ export default function Lab2() {
       <Corners/>
       <Dimensions/>
       <Positions/>
+      <Zindex/>
+      <Float/>
+      <GridLayout/>
     </div>
   );
 }
