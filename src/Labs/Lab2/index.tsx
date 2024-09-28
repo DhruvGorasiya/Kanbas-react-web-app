@@ -6,6 +6,7 @@ import Margins from "./Margins";
 import Positions from "./Positions";
 import Dimensions from "./Dimensions";
 import Zindex from "./Zindex";
+import Float from "./Float";
 import Corners from "./Corners";
 import "./index.css";
 export default function Lab2() {
@@ -66,6 +67,7 @@ export default function Lab2() {
       <Dimensions/>
       <Positions/>
       <Zindex/>
+      <Float/>
     </div>
   );
 }
