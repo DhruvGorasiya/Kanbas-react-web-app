@@ -5,6 +5,7 @@ import Padding from "./Padding";
 import Margins from "./Margins";
 import Positions from "./Positions";
 import Dimensions from "./Dimensions";
+import Zindex from "./Zindex";
 import Corners from "./Corners";
 import "./index.css";
 export default function Lab2() {
@@ -64,6 +65,7 @@ export default function Lab2() {
       <Corners/>
       <Dimensions/>
       <Positions/>
+      <Zindex/>
     </div>
   );
 }
