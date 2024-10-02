@@ -9,10 +9,18 @@ import Zindex from "./Zindex";
 import Float from "./Float";
 import Corners from "./Corners";
 import GridLayout from "./GridLayout";
+import ReactIconsSampler from "./ReactIcons";
+import BootstrapGrids from "./BootstrapGrids";
+import ScreenSizeLabel from "./ScreenSizeLabel";
+import BootstrapTables from "./BootstrapTables";
+import BootstrapLists from "./BootstrapLists";
+import BootstrapNavigation from "./BootstrapNavigation";
+import Flex from "./Flex";
 import "./index.css";
+import BootstrapForms from "./BootstrapForms";
 export default function Lab2() {
   return (
-    <div id="wd-lab2">
+    <div className="container">
       <h2>Lab 2 - Cascading Style Sheets</h2>
       <h3>Styling with the STYLE attribute</h3>
       <div id="wd-css-id-selectors">
@@ -70,6 +78,14 @@ export default function Lab2() {
       <Zindex/>
       <Float/>
       <GridLayout/>
+      <Flex/>
+      <ReactIconsSampler/>
+      <BootstrapGrids/>
+      <ScreenSizeLabel/>
+      <BootstrapTables/>
+      <BootstrapLists/>
+      <BootstrapForms/>
+      <BootstrapNavigation/>
     </div>
   );
 }
