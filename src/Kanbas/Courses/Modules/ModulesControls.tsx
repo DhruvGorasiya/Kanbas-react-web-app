@@ -1,5 +1,6 @@
 import { FaPlus } from "react-icons/fa6";
 import GreenCheckmark from "./GreenCheckmark";
+import { TiCancel } from "react-icons/ti";
 export default function ModulesControls() {
   return (
     <div id="wd-modules-controls" className="text-nowrap">
@@ -50,7 +51,7 @@ export default function ModulesControls() {
               className="dropdown-item"
               href="#"
             >
-              <GreenCheckmark />
+              <TiCancel />
               Unpublish all modules and items
             </a>
           </li>
@@ -60,7 +61,7 @@ export default function ModulesControls() {
               className="dropdown-item"
               href="#"
             >
-              <GreenCheckmark />
+              <TiCancel />
               Unpublish modules only
             </a>
           </li>
