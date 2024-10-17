@@ -8,15 +8,19 @@ import GreenCheckmark from "../Modules/GreenCheckmark";
 import { FaPlus } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import AssignmentControlButtons from "./AssignmentControlButtons";
+import * as db from "../../Database";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignments = db.assignments.filter((assignment) => assignment.course === cid);
   return (
     <div id="wd-assignments">
       <div
         className="d-flex align-items-center justify-content-between"
         style={{ maxWidth: "100%" }}
       >
-        {/* Search Input */}
         <div className="input-group" style={{ maxWidth: "300px" }}>
           <span className="input-group-text bg-white border-end-0">
             <FaSearch className="text-muted" />
@@ -66,7 +70,7 @@ export default function Assignments() {
               <AssignmentControlButtons />
             </div>
             <ul className="wd-lessons list-group rounded-0">
-              <li className="wd-lesson list-group-item d-flex p-3 ps-1">
+              {/* <li className="wd-lesson list-group-item d-flex p-3 ps-1">
                 <BsGripVertical className="me-2 fs-3" />
                 <MdOutlineAssignmentTurnedIn className="me-2 fs-3 text-success" />
                 <div style={{ flex: 2 }}>
@@ -75,7 +79,7 @@ export default function Assignments() {
                    href="#/Kanbas/Courses/1234/Assignments/123"
                    style={{ textDecoration: 'none', color: 'inherit' }}
                  >
-                   A1 
+                    A1
                  </a>
                   <br />
                   <span className="text-danger">Multiple Modules</span> |{" "}
@@ -127,7 +131,29 @@ export default function Assignments() {
                 <div style={{ flex: 0.5 }}>
                   <LessonControlButtons />
                 </div>
-              </li>
+              </li> */}
+
+              {assignments.map((assignment) => (
+                <li
+                  key={assignment._id}
+                  className="wd-lesson list-group-item d-flex p-3 ps-1"
+                >
+                  <BsGripVertical className="me-2 fs-3" />
+                  <MdOutlineAssignmentTurnedIn className="me-2 fs-3 text-success" />
+                  <div style={{ flex: 2 }}>
+                    <Link
+                      className="wd-assignment-link"
+                      to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      {assignment.title}
+                    </Link>
+                  </div>
+                  <div style={{ flex: 0.5 }}>
+                    <LessonControlButtons />
+                  </div>
+                </li>
+              ))}
             </ul>
           </li>
         </ul>
@@ -135,42 +161,3 @@ export default function Assignments() {
     </div>
   );
 }
-
-// <h3 id="wd-assignments-title">
-// ASSIGNMENTS 40% of Total <button>+</button>
-// </h3>
-// <ul id="wd-assignment-list">
-// <li className="wd-assignment-list-item">
-//   <a
-//     className="wd-assignment-link"
-//     href="#/Kanbas/Courses/1234/Assignments/123"
-//   >
-//     A1 - ENV + HTML
-//   </a>
-//   <br />
-//   Multiple Modules | <b>Not available until</b> May 6 at 12:0am |{" "}
-//   <b>Due</b> may 12 at 11:59pm | 100 pts
-// </li>
-// <li className="wd-assignment-list-item">
-//   <a
-//     className="wd-assignment-link"
-//     href="#/Kanbas/Courses/1234/Assignments/123"
-//   >
-//     A2 - CSS + BOOTSTRAP
-//   </a>
-//   <br />
-//   Multiple Modules | <b>Not available until</b> May 13 at 12:0am |{" "}
-//   <b>Due</b> may 20 at 11:59pm | 100 pts
-// </li>
-// <li className="wd-assignment-list-item">
-//   <a
-//     className="wd-assignment-link"
-//     href="#/Kanbas/Courses/1234/Assignments/123"
-//   >
-//     A3 - JAVASCRIPT + REACT
-//   </a>
-//   <br />
-//   Multiple Modules | <b>Not available until</b> May 20 at 12:0am |{" "}
-//   <b>Due</b> may 27 at 11:59pm | 100 pts
-// </li>
-// </ul>
