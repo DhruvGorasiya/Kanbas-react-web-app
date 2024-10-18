@@ -14,7 +14,9 @@ import { Link } from "react-router-dom";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments.filter((assignment) => assignment.course === cid);
+  const assignments = db.assignments.filter(
+    (assignment) => assignment.course === cid
+  );
   return (
     <div id="wd-assignments">
       <div
@@ -142,12 +144,18 @@ export default function Assignments() {
                   <MdOutlineAssignmentTurnedIn className="me-2 fs-3 text-success" />
                   <div style={{ flex: 2 }}>
                     <Link
-                      className="wd-assignment-link"
                       to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                      className="wd-assignment-link"
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       {assignment.title}
                     </Link>
+                    <br />
+                    <span className="text-danger">
+                      {assignment.modules}
+                    </span> | <b>Not available until</b>{" "}
+                    {assignment.availableDate[0]} | <b>Due</b> {assignment.dueDate[0]}{" "}
+                    | {assignment.points} pts
                   </div>
                   <div style={{ flex: 0.5 }}>
                     <LessonControlButtons />
@@ -161,3 +169,25 @@ export default function Assignments() {
     </div>
   );
 }
+
+// {assignments.map((assignment) => (
+//   <li
+//     key={assignment._id}
+//     className="wd-lesson list-group-item d-flex p-3 ps-1"
+//   >
+//     <BsGripVertical className="me-2 fs-3" />
+//     <MdOutlineAssignmentTurnedIn className="me-2 fs-3 text-success" />
+//     <div style={{ flex: 2 }}>
+//       <Link
+//         className="wd-assignment-link"
+//         to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+//         style={{ textDecoration: "none", color: "inherit" }}
+//       >
+//         {assignment.title}
+//       </Link>
+//     </div>
+//     <div style={{ flex: 0.5 }}>
+//       <LessonControlButtons />
+//     </div>
+//   </li>
+// ))}

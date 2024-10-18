@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
+import * as db from "../../Database";
+import { useParams } from "react-router";
 
 export default function AssignmentEditor() {
+  const { cid,aid } = useParams();
+  const assignmentsInfo = db.assignments.find((assignments) => assignments._id === aid);
+
+  if (!assignmentsInfo) {
+    return <div>Assignment not found</div>;
+  }
+
   return (
     <div id="wd-assignments-editor">
       <div id="wd-css-styling-forms">
@@ -8,15 +17,15 @@ export default function AssignmentEditor() {
           <label htmlFor="wd-name" className="form-label">
             Assignment Name
           </label>
-          <input id="wd-name" className="form-control" value="A1" />
+          <input id="wd-name" className="form-control" value={assignmentsInfo.title} />
         </div>
 
         <div className="mb-3">
           <textarea
             className="form-control"
             id="wd-description"
-            rows={11}
-            defaultValue={`The assignment is available online.\nSubmit a link to the landing page of your Web application running on Netlify.\n\nThe landing page should include the following:\n\n• Your full name and section\n• Links to each of the lab assignments\n• Link to the Kanbas application\n• Links to all relevant source code repositories\n\nThe Kanbas application should include a link to navigate back to the landing page.`}
+            rows={5}
+            defaultValue={assignmentsInfo.description}
           />
         </div>
       </div>
@@ -33,7 +42,7 @@ export default function AssignmentEditor() {
                 type="number"
                 className="form-control"
                 id="wd-points"
-                value="100"
+                value={assignmentsInfo.points}
               />
             </div>
           </div>
@@ -179,7 +188,7 @@ export default function AssignmentEditor() {
                     type="text"
                     className="form-control"
                     id="wd-assign-to"
-                    defaultValue="Everyone"
+                    defaultValue=""
                   />
                 </div>
                 <div className="mb-3">
@@ -190,7 +199,7 @@ export default function AssignmentEditor() {
                     type="datetime-local"
                     className="form-control"
                     id="wd-due-date"
-                    defaultValue="May 13, 2024, 11:59 PM"
+                    value={assignmentsInfo.availableDate[1]}
                   />
                 </div>
                 <div className="row">
@@ -202,7 +211,7 @@ export default function AssignmentEditor() {
                       type="datetime-local"
                       className="form-control"
                       id="wd-available-from"
-                      defaultValue="May 6, 2024, 12:00 AM"
+                      defaultValue={assignmentsInfo.availableDate[1]}
                     />
                   </div>
                   <div className="col-md-6 mb-3">
@@ -213,6 +222,7 @@ export default function AssignmentEditor() {
                       type="datetime-local"
                       className="form-control"
                       id="wd-available-until"
+                      value={assignmentsInfo.dueDate[1]}
                     />
                   </div>
                 </div>
@@ -229,27 +239,25 @@ export default function AssignmentEditor() {
           <td align="right">
             <Link
               id="wd-course-quizzes-link"
-              to="/Kanbas/Courses/1234/Assignments"
+              to={`/Kanbas/Courses/${cid}/Assignments`}
             >
 
               <button
               id="wd-add-module-btn"
               className="btn btn-lg btn-danger me-1 float-end"
             >
-              
               Save
             </button>
 
             </Link>
             <Link
               id="wd-course-quizzes-link"
-              to="/Kanbas/Courses/1234/Assignments"
+              to={`/Kanbas/Courses/${cid}/Assignments`}
             >
               <button
               id="wd-add-module-btn"
               className="btn btn-lg btn-secondary me-1 float-end"
             >
-              
               Cancel
             </button>
             </Link>
