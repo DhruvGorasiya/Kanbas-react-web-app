@@ -4,11 +4,21 @@ import { useParams } from "react-router";
 
 export default function AssignmentEditor() {
   const { cid,aid } = useParams();
-  const assignmentsInfo = db.assignments.find((assignments) => assignments._id === aid);
+  const assignmentsInfo = db.assignments.find((assignments) => assignments._id === aid) || {
+    title: "Assignment Name",
+    description: "Assignment Description",
+    points: 0,
+    group: "ASSIGNMENTS",
+    displayGradeAs: "GRADESp",
+    submissionType: "Online",
+    availableDate: ["", ""],
+    dueDate: ["", ""],
+    assignTo: "",
+  };
 
-  if (!assignmentsInfo) {
-    return <div>Assignment not found</div>;
-  }
+  // if (!assignmentsInfo) {
+  //   return <div>Assignment not found</div>;
+  // }
 
   return (
     <div id="wd-assignments-editor">

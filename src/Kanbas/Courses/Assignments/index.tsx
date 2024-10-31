@@ -10,13 +10,14 @@ import { FaSearch } from "react-icons/fa";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import * as db from "../../Database";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 export default function Assignments() {
   const { cid } = useParams();
   const assignments = db.assignments.filter(
     (assignment) => assignment.course === cid
   );
+  const navigate = useNavigate();
   return (
     <div id="wd-assignments">
       <div
@@ -40,6 +41,7 @@ export default function Assignments() {
           <button
             id="wd-add-assignment-btn"
             className="btn btn-lg btn-danger me-2"
+            onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments/Editor`)}
           >
             <FaPlus
               className="position-relative me-2"
