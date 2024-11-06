@@ -5,18 +5,25 @@ import { RiArrowDropDownFill } from "react-icons/ri";
 import { MdAssignment } from "react-icons/md";
 import { MdOutlineAssignmentTurnedIn } from "react-icons/md";
 import GreenCheckmark from "../Modules/GreenCheckmark";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import * as db from "../../Database";
 import { useParams } from "react-router";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Assignment } from "../../types";
+import { deleteAssignment } from "./reducer";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments.filter(
-    (assignment) => assignment.course === cid
-  );
+  const { assignments } = useSelector((state: any) => {
+    const filteredAssign = state.assignmentReducer.assignments.filter((assignment: Assignment) => assignment.course === cid);
+    return { assignments: filteredAssign }
+  });
+
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   return (
     <div id="wd-assignments">
@@ -42,6 +49,7 @@ export default function Assignments() {
             id="wd-add-assignment-btn"
             className="btn btn-lg btn-danger me-2"
             onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments/Editor`)}
+
           >
             <FaPlus
               className="position-relative me-2"
@@ -74,70 +82,8 @@ export default function Assignments() {
               <AssignmentControlButtons />
             </div>
             <ul className="wd-lessons list-group rounded-0">
-              {/* <li className="wd-lesson list-group-item d-flex p-3 ps-1">
-                <BsGripVertical className="me-2 fs-3" />
-                <MdOutlineAssignmentTurnedIn className="me-2 fs-3 text-success" />
-                <div style={{ flex: 2 }}>
-                <a
-                   className="wd-assignment-link"
-                   href="#/Kanbas/Courses/1234/Assignments/123"
-                   style={{ textDecoration: 'none', color: 'inherit' }}
-                 >
-                    A1
-                 </a>
-                  <br />
-                  <span className="text-danger">Multiple Modules</span> |{" "}
-                  <b>Not available until</b> May 6 at 12:00am | <b>Due</b> may
-                  13 at 11:59pm | 100 pts
-                </div>
-                <div style={{ flex: 0.5 }}>
-                  <LessonControlButtons />
-                </div>
-              </li>
 
-              <li className="wd-lesson list-group-item d-flex p-3 ps-1">
-                <BsGripVertical className="me-2 fs-3" />
-                <MdOutlineAssignmentTurnedIn className="me-2 fs-3 text-success" />
-                <div style={{ flex: 2 }}>
-                <a
-                   className="wd-assignment-link"
-                   href="#/Kanbas/Courses/1234/Assignments/123"
-                   style={{ textDecoration: 'none', color: 'inherit' }}
-                 >
-                   A2 
-                 </a>
-                  <br />
-                  <span className="text-danger">Multiple Modules</span> |{" "}
-                  <b>Not available until</b> May 13 at 12:00am | <b>Due</b> may
-                  20 at 11:59pm | 100 pts
-                </div>
-                <div style={{ flex: 0.5 }}>
-                  <LessonControlButtons />
-                </div>
-              </li>
-
-              <li className="wd-lesson list-group-item d-flex p-3 ps-1">
-                <BsGripVertical className="me-2 fs-3" />
-                <MdOutlineAssignmentTurnedIn className="me-2 fs-3 text-success" />
-                <div style={{ flex: 2 }}>
-                <a
-                   className="wd-assignment-link"
-                   href="#/Kanbas/Courses/1234/Assignments/123"
-                   style={{ textDecoration: 'none', color: 'inherit' }}
-                 >
-                   A3 
-                 </a>
-                  <br />
-                  <span className="text-danger">Multiple Modules</span> |{" "}
-                  <b>Not available until</b> May 20 at 12:00am | <b>Due</b> may
-                  27 at 11:59pm | 100 pts
-                </div>
-                <div style={{ flex: 0.5 }}>
-                  <LessonControlButtons />
-                </div>
-              </li> */}
-
-              {assignments.map((assignment) => (
+              {assignments.map((assignment: Assignment) => (
                 <li
                   key={assignment._id}
                   className="wd-lesson list-group-item d-flex p-3 ps-1"
@@ -156,11 +102,14 @@ export default function Assignments() {
                     <span className="text-danger">
                       {assignment.modules}
                     </span> | <b>Not available until</b>{" "}
-                    {assignment.availableDate[0]} | <b>Due</b> {assignment.dueDate[0]}{" "}
+                    {assignment.availableDate} | <b>Due</b> {assignment.dueDate}{" "}
                     | {assignment.points} pts
                   </div>
                   <div style={{ flex: 0.5 }}>
+                    <FaTrash className="text-danger me-2 mb-1"
+                      onClick={() => { dispatch(deleteAssignment(assignment._id)) }} />
                     <LessonControlButtons />
+
                   </div>
                 </li>
               ))}
@@ -171,25 +120,3 @@ export default function Assignments() {
     </div>
   );
 }
-
-// {assignments.map((assignment) => (
-//   <li
-//     key={assignment._id}
-//     className="wd-lesson list-group-item d-flex p-3 ps-1"
-//   >
-//     <BsGripVertical className="me-2 fs-3" />
-//     <MdOutlineAssignmentTurnedIn className="me-2 fs-3 text-success" />
-//     <div style={{ flex: 2 }}>
-//       <Link
-//         className="wd-assignment-link"
-//         to={`/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
-//         style={{ textDecoration: "none", color: "inherit" }}
-//       >
-//         {assignment.title}
-//       </Link>
-//     </div>
-//     <div style={{ flex: 0.5 }}>
-//       <LessonControlButtons />
-//     </div>
-//   </li>
-// ))}

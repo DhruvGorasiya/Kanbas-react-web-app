@@ -8,6 +8,7 @@ const modulesSlice = createSlice({
   initialState,
   reducers: {
     addModule: (state, { payload: module }) => {
+      console.log("Dhruv is here");
       const newModule: any = {
         _id: new Date().getTime().toString(),
         lessons: [],
