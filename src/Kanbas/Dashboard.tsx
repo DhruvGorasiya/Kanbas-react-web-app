@@ -179,7 +179,7 @@
 //               </Link>
 //             </div>
 //           </div>
-        
+
 
 //         <div className="wd-dashboard-course col" style={{ width: "300px" }}>
 //             <div className="card rounded-3 overflow-hidden">
@@ -330,7 +330,7 @@ export default function Dashboard({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showAllCourses, setShowAllCourses] = useState(false);
-  
+
   // Get current user and enrollments from Redux store
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
@@ -392,20 +392,24 @@ export default function Dashboard({
       {currentUser.role === "FACULTY" && (
         <>
           <h5>
-            Course Management
+            New Course
             <button
               className="btn btn-primary float-end"
+              id="wd-add-new-course-click"
               onClick={addNewCourse}
             >
-              Add New Course
+              {" "}
+              Add{" "}
             </button>
             <button
               className="btn btn-warning float-end me-2"
               onClick={updateCourse}
+              id="wd-update-course-click"
             >
-              Update Course
+              Update
             </button>
           </h5>
+          <br />
           <input
             value={course.name}
             className="form-control mb-2"
@@ -414,9 +418,7 @@ export default function Dashboard({
           <textarea
             value={course.description}
             className="form-control"
-            onChange={(e) =>
-              setCourse({ ...course, description: e.target.value })
-            }
+            onChange={(e) => setCourse({ ...course, description: e.target.value })}
           />
           <hr />
         </>
@@ -451,7 +453,7 @@ export default function Dashboard({
                 >
                   {course.description}
                 </p>
-                
+
                 <div className="d-flex justify-content-between align-items-center">
                   <button
                     className="btn btn-primary"
@@ -468,11 +470,10 @@ export default function Dashboard({
 
                   {isStudent && (
                     <button
-                      className={`btn ${
-                        enrolledCourseIds.includes(course._id)
+                      className={`btn ${enrolledCourseIds.includes(course._id)
                           ? "btn-danger"
                           : "btn-success"
-                      }`}
+                        }`}
                       onClick={() => handleEnrollmentToggle(course._id)}
                     >
                       {enrolledCourseIds.includes(course._id)
@@ -485,13 +486,13 @@ export default function Dashboard({
                     <div>
                       <button
                         onClick={() => setCourse(course)}
-                        className="btn btn-warning me-2"
+                        className="btn btn-warning me-2 float-end"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => deleteCourse(course._id)}
-                        className="btn btn-danger"
+                        className="btn btn-danger float-end"
                       >
                         Delete
                       </button>
