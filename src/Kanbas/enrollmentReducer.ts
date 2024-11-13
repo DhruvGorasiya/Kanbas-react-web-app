@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { enrollments as initialEnrollments } from "./Database";
 
 const initialState = {
-  enrollments: initialEnrollments,
+  enrollments: JSON.parse(localStorage.getItem("enrollments") || "[]"),
 };
 
 const enrollmentSlice = createSlice({
@@ -11,32 +10,28 @@ const enrollmentSlice = createSlice({
   reducers: {
     toggleEnrollment: (state, action) => {
       const { userId, courseId } = action.payload;
-      
-      // Check if enrollment exists
-      const existingEnrollmentIndex = state.enrollments.findIndex(
-        (enrollment) => 
-          enrollment.user === userId && 
-          enrollment.course === courseId
+      const existingEnrollment = state.enrollments.find(
+        (e: any) => e.user === userId && e.course === courseId
       );
 
-      if (existingEnrollmentIndex >= 0) {
-        // Unenroll: Remove the enrollment
-        state.enrollments.splice(existingEnrollmentIndex, 1);
+      if (existingEnrollment) {
+        state.enrollments = state.enrollments.filter(
+          (e: any) => !(e.user === userId && e.course === courseId)
+        );
       } else {
-        // Enroll: Add new enrollment
-        state.enrollments.push({
-          user: userId,
-          course: courseId,
-          _id: new Date().getTime().toString(),
-        });
+        state.enrollments.push({ user: userId, course: courseId });
       }
+      
+      // Persist to localStorage
+      localStorage.setItem("enrollments", JSON.stringify(state.enrollments));
     },
-
-    clearEnrollments: (state) => {
-      state.enrollments = initialEnrollments;
+    setEnrollments: (state, action) => {
+      state.enrollments = action.payload;
+      localStorage.setItem("enrollments", JSON.stringify(action.payload));
     },
   },
 });
 
-export const { toggleEnrollment, clearEnrollments } = enrollmentSlice.actions;
+export const { toggleEnrollment, setEnrollments } = enrollmentSlice.actions;
 export default enrollmentSlice.reducer;
+

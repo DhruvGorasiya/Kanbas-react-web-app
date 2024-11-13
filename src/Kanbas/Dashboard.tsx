@@ -392,6 +392,7 @@ export default function Dashboard({
       {currentUser.role === "FACULTY" && (
         <>
           <h5>
+            This is the faculty dashboard.
             New Course
             <button
               className="btn btn-primary float-end"
