@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 export default function WorkingWithArrays() {
   const API = `${REMOTE_SERVER}/lab5/todos`;
+  
   const [todo, setTodo] = useState({
     id: "1",
     title: "NodeJS Assignment",
@@ -10,6 +11,7 @@ export default function WorkingWithArrays() {
     due: "2021-09-09",
     completed: false,
   });
+  
   return (
     <div id="wd-working-with-arrays">
       <h3>Working with Arrays</h3>
