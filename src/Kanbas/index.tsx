@@ -4,7 +4,7 @@ import KanbasNavigation from "./Navigation";
 import Dashboard from "./Dashboard";
 import Courses from "./Courses";
 import "./styles.css";
-import * as db from "./Database";
+import * as db from "./Database/index.js";
 import { useState } from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
 
