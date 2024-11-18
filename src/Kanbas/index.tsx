@@ -5,11 +5,44 @@ import Dashboard from "./Dashboard";
 import Courses from "./Courses";
 import "./styles.css";
 import * as db from "./Database";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
+import * as userClient from "./Account/client";
+import { useSelector } from "react-redux";
+import * as courseClient from "./Courses/client";
 
 export default function Kanbas() {
-  const [courses, setCourses] = useState<any[]>(db.courses);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [courses, setCourses] = useState<any[]>([]);
+  const [enrolledCourses, setEnrolledCourses] = useState<any[]>([]);
+  const fetchCourses = async () => {
+    let courses = [];
+    try {
+      courses = await userClient.findAllCourses();
+    } catch (error) {
+      console.error(error);
+    }
+    setCourses(courses);
+  };
+
+
+  const fetchEnrolledCourses = async () => {
+    let enrolledCourses = [];
+    try {
+      enrolledCourses = await userClient.findMyCourses();
+    } catch (error) {
+      console.error(error);
+    }
+    setEnrolledCourses(enrolledCourses);
+  };
+
+  useEffect(() => {
+    if(currentUser){
+      fetchCourses();
+    fetchEnrolledCourses();
+    }
+  }, [currentUser]);
+
   const [course, setCourse] = useState<any>({
     _id: "1234",
     name: "New Course",
@@ -18,26 +51,11 @@ export default function Kanbas() {
     endDate: "2023-12-15",
     description: "New Description",
   });
-  const addNewCourse = () => {
-    setCourses([
-      ...courses,
-      { ...course, _id: new Date().getTime().toString() },
-    ]);
-  };
-  const deleteCourse = (courseId: any) => {
-    setCourses(courses.filter((course) => course._id !== courseId));
-  };
-  const updateCourse = () => {
-    setCourses(
-      courses.map((c) => {
-        if (c._id === course._id) {
-          return course;
-        } else {
-          return c;
-        }
-      })
-    );
-  };
+
+
+
+
+  
 
   return (
     <div id="wd-kanbas">
@@ -53,10 +71,9 @@ export default function Kanbas() {
                 <Dashboard
                   courses={courses}
                   course={course}
+                  enrolledCourses={enrolledCourses}
+                  setEnrolledCourses={setEnrolledCourses}
                   setCourse={setCourse}
-                  addNewCourse={addNewCourse}
-                  deleteCourse={deleteCourse}
-                  updateCourse={updateCourse}
                 />
               </ProtectedRoute>
             }
