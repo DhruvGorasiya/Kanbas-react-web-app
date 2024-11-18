@@ -11,16 +11,12 @@ export default function Dashboard({
   setEnrolledCourses,
   course,
   setCourse,
-  setCourses,
-  deleteCourse,
 }: {
   courses: any[];
   enrolledCourses: any[];
   setEnrolledCourses: (courses: any[]) => void;
   course: any;
   setCourse: (course: any) => void;
-  setCourses: (courses: any[]) => void;
-  deleteCourse: (course: any) => void;
 }) {
   const navigate = useNavigate();
   const [showAllCourses, setShowAllCourses] = useState(false);
@@ -51,6 +47,11 @@ export default function Dashboard({
     }
   };
 
+  const deleteCourse = async (courseId: any) => {
+    const status = await courseClient.deleteCourse(courseId);
+    setEnrolledCourses(enrolledCourses.filter((course) => course._id !== courseId));
+  };
+
   const handleCourseNavigation = (
     e: React.MouseEvent,
     courseId: string,
@@ -78,7 +79,7 @@ export default function Dashboard({
 
   const addNewCourse = async () => {
     const newCourse = await userClient.createCourse(course);
-    setCourses([...courses, { ...course, newCourse }]);
+    setEnrolledCourses([...enrolledCourses, newCourse]);
   };
 
   const CourseGrid = ({ course }: { course: any }) => {

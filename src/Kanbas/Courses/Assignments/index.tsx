@@ -14,15 +14,28 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Assignment } from "../../types";
 import { deleteAssignment } from "./reducer";
+import * as assignmentsClient from "./client";
+import { useEffect, useState } from "react";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const { assignments } = useSelector((state: any) => {
-    const filteredAssign = state.assignmentReducer.assignments.filter((assignment: Assignment) => assignment.course === cid);
-    return { assignments: filteredAssign }
-  });
+  const [assignments, setAssignments] = useState([]);
 
-  const dispatch = useDispatch();
+  const fetchAssignments = async () => {
+    const a = await assignmentsClient.fetchAssignment(cid);
+    setAssignments(a);
+  }
+
+  const deleteAssignment = async (assignId: any) => {
+    await assignmentsClient.deleteAssignment(assignId);
+    fetchAssignments();
+  }
+
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
+  // const dispatch = useDispatch();
 
   const navigate = useNavigate();
   return (
@@ -107,7 +120,7 @@ export default function Assignments() {
                   </div>
                   <div style={{ flex: 0.5 }}>
                     <FaTrash className="text-danger me-2 mb-1"
-                      onClick={() => { dispatch(deleteAssignment(assignment._id)) }} />
+                      onClick={() => { deleteAssignment(assignment._id) }} />
                     <LessonControlButtons />
 
                   </div>

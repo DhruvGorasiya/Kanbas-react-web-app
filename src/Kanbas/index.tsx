@@ -53,10 +53,7 @@ export default function Kanbas() {
   });
 
 
-  const deleteCourse = async (courseId: any) => {
-    const status = await courseClient.deleteCourse(courseId);
-    setCourses(courses.filter((course) => course._id !== courseId));
-  };
+
 
   
 
@@ -76,11 +73,7 @@ export default function Kanbas() {
                   course={course}
                   enrolledCourses={enrolledCourses}
                   setEnrolledCourses={setEnrolledCourses}
-                  setCourses={setCourses}
-                  // setAllCourses={setCourses}
                   setCourse={setCourse}
-                  deleteCourse={deleteCourse}
-
                 />
               </ProtectedRoute>
             }
