@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
 import * as userClient from "./Account/client";
 import { useSelector } from "react-redux";
+import Session from "./Account/Session";
 import * as courseClient from "./Courses/client";
 
 export default function Kanbas() {
@@ -25,7 +26,6 @@ export default function Kanbas() {
     setCourses(courses);
   };
 
-
   const fetchEnrolledCourses = async () => {
     let enrolledCourses = [];
     try {
@@ -37,9 +37,9 @@ export default function Kanbas() {
   };
 
   useEffect(() => {
-    if(currentUser){
+    if (currentUser) {
       fetchCourses();
-    fetchEnrolledCourses();
+      fetchEnrolledCourses();
     }
   }, [currentUser]);
 
@@ -52,44 +52,41 @@ export default function Kanbas() {
     description: "New Description",
   });
 
-
-
-
-  
-
   return (
-    <div id="wd-kanbas">
-      <KanbasNavigation />
-      <div className="wd-main-content-offset p-3">
-        <Routes>
-          <Route path="/" element={<Navigate to="/Kanbas/Account" />} />
-          <Route path="/Account/*" element={<Account />} />
-          <Route
-            path="/Dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard
-                  courses={courses}
-                  course={course}
-                  enrolledCourses={enrolledCourses}
-                  setEnrolledCourses={setEnrolledCourses}
-                  setCourse={setCourse}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="Courses/:cid/*"
-            element={
-              <ProtectedRoute>
-                <Courses courses={courses} />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/Calendar" element={<h1>Calendar</h1>} />
-          <Route path="/Inbox" element={<h1>Inbox</h1>} />
-        </Routes>
+    <Session>
+      <div id="wd-kanbas">
+        <KanbasNavigation />
+        <div className="wd-main-content-offset p-3">
+          <Routes>
+            <Route path="/" element={<Navigate to="/Kanbas/Account" />} />
+            <Route path="/Account/*" element={<Account />} />
+            <Route
+              path="/Dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard
+                    courses={courses}
+                    course={course}
+                    enrolledCourses={enrolledCourses}
+                    setEnrolledCourses={setEnrolledCourses}
+                    setCourse={setCourse}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="Courses/:cid/*"
+              element={
+                <ProtectedRoute>
+                  <Courses courses={courses} />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/Calendar" element={<h1>Calendar</h1>} />
+            <Route path="/Inbox" element={<h1>Inbox</h1>} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </Session>
   );
 }
