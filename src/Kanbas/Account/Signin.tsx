@@ -13,9 +13,12 @@ export default function Signin() {
     const user = await client.signin(credentials);
     if (!user) return;
     console.log("user", user);
-    // dispatch(setCurrentUser(user));
-    setCurrentUser(user);
+    console.log("Mayank 1");
+    dispatch(setCurrentUser(user));
+    console.log("Mayank 2");
+    // setCurrentUser(user);
     navigate("/Kanbas/Dashboard");
+    console.log("Mayank 3");
   };
   return (
     <div id="wd-signin-screen">
