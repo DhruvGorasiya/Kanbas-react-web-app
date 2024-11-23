@@ -24,6 +24,8 @@ export default function Dashboard({
     useState<any[]>(enrolledCourses);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+  console.log("this is the current user for the dashboard: ",currentUser)
+
   const showFilteredCourses = () => {
     showAllCourses
       ? setFilteredCourses(enrolledCourses)
