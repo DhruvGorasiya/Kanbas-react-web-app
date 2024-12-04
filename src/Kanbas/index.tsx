@@ -11,7 +11,6 @@ import * as userClient from "./Account/client";
 import { useSelector } from "react-redux";
 import Session from "./Account/Session";
 import * as courseClient from "./Courses/client";
-import { set } from "mongoose";
 
 export default function Kanbas() {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
