@@ -23,6 +23,9 @@ export default function Editor() {
   });
 
   const fetchAssignmentById = async () => {
+    if (aid === "Editor") {
+      return;
+    }
     const assignment = await assignmentsClient.fetchAssignmentById(cid, aid);
     console.log("assignment:", assignment);
     setAssignment(assignment);
@@ -33,7 +36,7 @@ export default function Editor() {
   }, []);
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const isFaculty = currentUser.role === "FACULTY";
+  const isFaculty = currentUser.role === "FACULTY" || currentUser.role === "ADMIN";
 
   const updateAssignment = async (assignment: any) => {
     const updatedAssignment = await assignmentsClient.updateAssignment(
@@ -44,6 +47,8 @@ export default function Editor() {
   };
 
   const createAssignment = async (courseId: any, assignment: any) => {
+    console.log("Creating assignment:", assignment);
+    
     const newAssignment = await assignmentsClient.createAssignment(
       courseId,
       assignment

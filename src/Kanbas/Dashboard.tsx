@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleEnrollment } from "./enrollmentReducer";
 import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client";
+import { set } from "mongoose";
 
 export default function Dashboard({
   courses,
@@ -11,20 +12,26 @@ export default function Dashboard({
   setEnrolledCourses,
   course,
   setCourse,
+  enrolling,
+  setEnrolling,
+  updateEnrollment,
+  setCourses,
 }: {
   courses: any[];
   enrolledCourses: any[];
   setEnrolledCourses: (courses: any[]) => void;
   course: any;
   setCourse: (course: any) => void;
+  enrolling: boolean;
+  setEnrolling: (enrolling: boolean) => void;
+  updateEnrollment: (courseId: string, enrolled: boolean) => void;
+  setCourses: (courses: any[]) => void;
 }) {
   const navigate = useNavigate();
   const [showAllCourses, setShowAllCourses] = useState(false);
   const [filteredCourses, setFilteredCourses] =
     useState<any[]>(enrolledCourses);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-
-  console.log("this is the current user for the dashboard: ",currentUser)
 
   const showFilteredCourses = () => {
     showAllCourses
@@ -50,8 +57,11 @@ export default function Dashboard({
   };
 
   const deleteCourse = async (courseId: any) => {
+    // const status = await courseClient.deleteCourse(courseId);
     const status = await courseClient.deleteCourse(courseId);
-    setEnrolledCourses(enrolledCourses.filter((course) => course._id !== courseId));
+    setEnrolledCourses(
+      enrolledCourses.filter((course) => course._id !== courseId)
+    );
   };
 
   const handleCourseNavigation = (
@@ -60,7 +70,7 @@ export default function Dashboard({
     to: string
   ) => {
     e.preventDefault();
-    if (!isStudent || filteredCourses.some((c) => c._id === courseId)) {
+    if (!isStudent || enrolledCourses.some((c) => c._id === courseId)) {
       navigate(to);
     } else {
       alert("You must be enrolled in this course to view its content.");
@@ -69,19 +79,31 @@ export default function Dashboard({
 
   const updateCourse = async () => {
     const update = await courseClient.updateCourse(course);
+    console.log("update: ",update);
+
 
     if (update) {
-      enrolledCourses.find((c) => c._id === course._id).name = update.name;
-      enrolledCourses.find((c) => c._id === course._id).description =
-        update.description;
+      console.log(courses.find((c) => c._id === course._id));
+      courses.find((c) => c._id === course._id).name = update.name;
+      courses.find((c) => c._id === course._id).description = update.description;
 
-      setCourse(enrolledCourses.find((c) => c._id === course._id));
+      if(course.enrolled){
+        console.log("Course is enrolled");
+      }
+
+      setCourse(courses.find((c) => c._id === course._id));
     }
   };
 
+  useEffect(() => {
+  }, [enrolling]);
+
   const addNewCourse = async () => {
-    const newCourse = await userClient.createCourse(course);
+    // const newCourse = await userClient.createCourse(course);
+    const newCourse = await courseClient.createCourse(course);
     setEnrolledCourses([...enrolledCourses, newCourse]);
+    setCourse(newCourse);
+
   };
 
   const CourseGrid = ({ course }: { course: any }) => {
@@ -98,6 +120,7 @@ export default function Dashboard({
             }}
           />
           <div className="card-body">
+            
             <h5 className="card-title">{c.name}</h5>
             <p
               className="card-text overflow-hidden"
@@ -120,7 +143,21 @@ export default function Dashboard({
                 View Course
               </button>
 
-              {isStudent && (
+              {enrolling && (
+              <button
+                onClick={(event) => {
+                  event.preventDefault();
+                  updateEnrollment(course._id, !course.enrolled);
+                }}
+                className={`btn ${
+                  course.enrolled ? "btn-danger" : "btn-success"
+                } float-end`}
+              >
+                {course.enrolled ? "Unenroll" : "Enroll"}
+              </button>
+            )}
+
+              {/* {isStudent && (
                 <>
                   {!enrolledCourses.some((e) => e._id === c._id) &&
                     showAllCourses && (
@@ -140,9 +177,10 @@ export default function Dashboard({
                     </button>
                   )}
                 </>
-              )}
+              )} */}
 
-              {currentUser.role === "FACULTY" && (
+              {/* {currentUser.role === "FACULTY" && ( */}
+              {!isStudent && (
                 <div>
                   <button
                     onClick={() => setCourse(c)}
@@ -169,15 +207,21 @@ export default function Dashboard({
     <div className="p-4" id="wd-dashboard">
       <div className="d-flex justify-content-between align-items-center">
         <h1 id="wd-dashboard-title">Dashboard</h1>
-        {isStudent && (
+        <button
+          onClick={() => setEnrolling(!enrolling)}
+          className="float-end btn btn-primary"
+        >
+          {enrolling ? "My Courses" : "All Courses"}
+        </button>
+        {/* {isStudent && (
           <button className="btn btn-primary" onClick={showFilteredCourses}>
             {showAllCourses ? "Show My Enrollments" : "Show All Courses"}
           </button>
-        )}
+        )} */}
       </div>
       <hr />
 
-      {currentUser.role === "FACULTY" && (
+      {(currentUser.role === "FACULTY" || currentUser.role === "ADMIN") && (
         <>
           <h5>
             This is the faculty dashboard. New Course
@@ -216,15 +260,16 @@ export default function Dashboard({
 
       {/* Course List Section */}
       <h2>
-        {showAllCourses
+        {enrolling
           ? "All Available Courses"
           : `${isStudent ? "My Enrolled" : "Published"} Courses`}{" "}
-        ({showAllCourses ? courses.length : enrolledCourses.length})
+        ({enrolling ? courses.length : enrolledCourses.length})
       </h2>
       <hr />
 
       <div className="row row-cols-1 row-cols-md-5 g-4">
-        {showAllCourses
+        {/* {showAllCourses */}
+        {enrolling
           ? courses.map((c) => <CourseGrid key={c._id} course={c} />)
           : enrolledCourses.map((c) => <CourseGrid key={c._id} course={c} />)}
       </div>
