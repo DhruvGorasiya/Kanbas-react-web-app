@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const REMOTE_SERVER = process.env.REACT_APP_SERVER_API || "http://localhost:4000";
+const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER || "http://localhost:4000";
 
 function QueryParameters() {
   const [a, setA] = useState("6");
