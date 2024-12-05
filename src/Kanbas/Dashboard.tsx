@@ -335,6 +335,7 @@ export default function Dashboard({
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { enrollments } = useSelector((state: any) => state.enrollmentReducer);
   const isStudent = currentUser.role === "STUDENT";
+  const isFaculty = currentUser.role === "FACULTY";
 
   // Filter courses based on enrollments
   const userEnrollments = enrollments.filter(
@@ -345,9 +346,16 @@ export default function Dashboard({
     (enrollment: any) => enrollment.course
   );
 
-  const displayedCourses = showAllCourses
+  let displayedCourses: any[] = [];
+
+  if (isFaculty) {
+     displayedCourses = courses
+  } else {
+     displayedCourses = showAllCourses
     ? courses
     : courses.filter((course) => enrolledCourseIds.includes(course._id));
+  }
+
 
   // Handle enrollment toggle
   const handleEnrollmentToggle = (courseId: string) => {
