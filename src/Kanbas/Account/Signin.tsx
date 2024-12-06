@@ -12,7 +12,9 @@ export default function Signin() {
   const signin = async() => {
     const user = await client.signin(credentials);
     if (!user) return;
+    console.log("user", user);
     dispatch(setCurrentUser(user));
+    // setCurrentUser(user);
     navigate("/Kanbas/Dashboard");
   };
   return (

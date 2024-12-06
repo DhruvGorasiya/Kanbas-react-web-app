@@ -21,6 +21,9 @@ export default function Modules() {
   const [moduleName, setModuleName] = useState("");
   const { modules } = useSelector((state: any) => state.modulesReducer);
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+  const isStudent = currentUser.role === "STUDENT";
 
   const saveModule = async (module: any) => {
     await modulesClient.updateModule(module);

@@ -4,6 +4,7 @@ const ASSIGNMENT_API=`${API_BASE}/api/assignments`;
 const COURSE_API=`${API_BASE}/api/courses`;
 
 export const createAssignment= async (courseId:any, assignment:any)=>{
+    console.log("SEcondasdfasdnfkajsdhfaipsohdf:", assignment);
     const response=await axios.post(`${COURSE_API}/${courseId}/assignments`,assignment);
     return response.data;
 };
