@@ -60,7 +60,7 @@ export default function TOC() {
       </li>
       {/* Links to my GitHub and Heroku */}
       <li className="nav-item">
-        <a id="wd-k" href="https://github.com/DhruvGorasiya/kanbas-react-web-app/tree/a5" className="nav-link">
+        <a id="wd-k" href="https://github.com/DhruvGorasiya/kanbas-react-web-app/tree/a6" className="nav-link">
           My GitHub
         </a>
       </li>
